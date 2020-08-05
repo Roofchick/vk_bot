@@ -1,0 +1,3 @@
+iha_bot (clone v2)
+Отправлено сообщений: %COUNT_MESSAGES%
+Время работы: %UPTIME%
