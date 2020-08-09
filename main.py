@@ -83,6 +83,7 @@ def main(ac, TOKEN, STATUS, SLEEP, MARK, NAME, auto_friends, ls_user, group_name
 			message = 0
 			tr = 0
 			tr_group = False
+			is_audio = False
 			if not group:
 				if i[0] == 4:
 					if 'source_act' in i[-1]:
@@ -151,13 +152,13 @@ def main(ac, TOKEN, STATUS, SLEEP, MARK, NAME, auto_friends, ls_user, group_name
 						if not ans and not attachments:
 							for s in message:
 								if s in string.ascii_letters:
-									ans, attachments = get_ans(message, base, commands, TOKEN, i[3], group, tr_group, voice_bot, user_id, count_message, start_bot, regulars)
+									ans, attachments, is_audio = get_ans(message, base, commands, TOKEN, i[3], group, tr_group, voice_bot, user_id, count_message, start_bot, regulars)
 									break
 							if not ans:
 								try:
 									ans = str(round(eval(message), 3))
 								except:
-									ans, attachments = get_ans(message, base, commands, TOKEN, i[3], group, tr_group, voice_bot, user_id, count_message, start_bot, regulars)
+									ans, attachments, is_audio = get_ans(message, base, commands, TOKEN, i[3], group, tr_group, voice_bot, user_id, count_message, start_bot, regulars)
 					if ans or attachments:
 						if ans:
 							for h in regulars:
@@ -173,6 +174,7 @@ def main(ac, TOKEN, STATUS, SLEEP, MARK, NAME, auto_friends, ls_user, group_name
 						if MARK:
 							ans = '(' + MARK + ') ' + ans
 						if SLEEP:
+							sl = requests.post('https://api.vk.com/method/messages.setActivity', params = {'type': 'typing', 'peer_id':  i[3], 'access_token': TOKEN, 'v': 5.122})
 							time.sleep(SLEEP)
 						max = 0
 						while True:
@@ -259,13 +261,13 @@ def main(ac, TOKEN, STATUS, SLEEP, MARK, NAME, auto_friends, ls_user, group_name
 						if not ans and not attachments:
 							for s in message:
 								if s in string.ascii_letters:
-									ans, attachments = get_ans(message, base, commands, TOKEN, i['object']['message']['peer_id'], group, tr_group, voice_bot, user_id, count_message, start_bot, regulars)
+									ans, attachments, is_audio = get_ans(message, base, commands, TOKEN, i['object']['message']['peer_id'], group, tr_group, voice_bot, user_id, count_message, start_bot, regulars)
 									break
 							if not ans:
 								try:
 									ans = str(round(eval(message), 3))
 								except:
-									ans, attachments = get_ans(message, base, commands, TOKEN, i['object']['message']['peer_id'], group, tr_group, voice_bot, user_id, count_message, start_bot, regulars)
+									ans, attachments, is_audio = get_ans(message, base, commands, TOKEN, i['object']['message']['peer_id'], group, tr_group, voice_bot, user_id, count_message, start_bot, regulars)
 					if ans or attachments:
 						if ans:
 							for h in regulars:
@@ -281,6 +283,10 @@ def main(ac, TOKEN, STATUS, SLEEP, MARK, NAME, auto_friends, ls_user, group_name
 						if MARK:
 							ans = '(' + MARK + ') ' + ans
 						if SLEEP:
+							if is_audio:
+								sl = requests.post('https://api.vk.com/method/messages.setActivity', params = {'type': 'audiomessage', 'peer_id':  i['object']['message']['peer_id'], 'access_token': TOKEN, 'v': 5.122})
+							else:
+								sl = requests.post('https://api.vk.com/method/messages.setActivity', params = {'type': 'typing', 'peer_id':  i['object']['message']['peer_id'], 'access_token': TOKEN, 'v': 5.122})
 							time.sleep(SLEEP)
 						max = 0
 						while True:

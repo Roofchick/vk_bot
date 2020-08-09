@@ -22,4 +22,4 @@ def append_attach(mess):
 			ans += i
 	if regular != '':
 		ans += '*' + regular
-	return ans, attach
+	return ans, attach, False
