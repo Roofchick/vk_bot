@@ -9,24 +9,26 @@ def get_ans(message, base, commands, TOKEN, peer_id, group, tr_group, voice_bot,
 	g = 0
 	for f in commands:
 		if f[0].lower() == message.lower():
-			return f[1]
-	for f in base:
-		if f and len(f) > 1:
-			s1, s2 = message.lower(), f[0].lower()
-			max = len(s2)
-			if len(s1) > len(s2):
-				s1, s2 = s2, s1
+			ans = f[1]
+			break
+	else:
+		for f in base:
+			if f and len(f) > 1:
+				s1, s2 = message.lower(), f[0].lower()
 				max = len(s2)
-			p = 0
-			for i in range(len(s1)):
-				if s1[i] == s2[i]:
-					p += 1
-				g = int(p/max*100)
-			if g > max_g:
-				ans = [f[1],]
-				max_g = g
-			if g == max_g:
-				ans.append(f[1])
+				if len(s1) > len(s2):
+					s1, s2 = s2, s1
+					max = len(s2)
+				p = 0
+				for i in range(len(s1)):
+					if s1[i] == s2[i]:
+						p += 1
+					g = int(p/max*100)
+				if g > max_g:
+					ans = [f[1],]
+					max_g = g
+				if g == max_g:
+					ans.append(f[1])
 	if ans:
 		ans = random.choice(ans)
 		if 'https://vk.com/' in ans:
