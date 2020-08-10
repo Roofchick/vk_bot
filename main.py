@@ -149,6 +149,7 @@ def main(ac, TOKEN, STATUS, SLEEP, MARK, NAME, auto_friends, ls_user, group_name
 							ans = weather(message, user_id, TOKEN)
 						if message.lower()[:5] == 'скажи':
 							attachments = tell(message[6:], TOKEN, i[3], group, tr_group)
+							is_audio = True
 						if not ans and not attachments:
 							for s in message:
 								if s in string.ascii_letters:
@@ -174,7 +175,10 @@ def main(ac, TOKEN, STATUS, SLEEP, MARK, NAME, auto_friends, ls_user, group_name
 						if MARK:
 							ans = '(' + MARK + ') ' + ans
 						if SLEEP:
-							sl = requests.post('https://api.vk.com/method/messages.setActivity', params = {'type': 'typing', 'peer_id':  i[3], 'access_token': TOKEN, 'v': 5.122})
+							if is_audio:
+								sl = requests.post('https://api.vk.com/method/messages.setActivity', params = {'type': 'audiomessage', 'peer_id':  i[3], 'access_token': TOKEN, 'v': 5.122})
+							else:
+								sl = requests.post('https://api.vk.com/method/messages.setActivity', params = {'type': 'typing', 'peer_id':  i[3], 'access_token': TOKEN, 'v': 5.122})
 							time.sleep(SLEEP)
 						max = 0
 						while True:
@@ -258,6 +262,7 @@ def main(ac, TOKEN, STATUS, SLEEP, MARK, NAME, auto_friends, ls_user, group_name
 							ans = weather(message, user_id, TOKEN)
 						if message.lower()[:5] == 'скажи':
 							attachments = tell(message[6:], TOKEN, i['object']['message']['peer_id'], group, tr_group)
+							is_audio = True
 						if not ans and not attachments:
 							for s in message:
 								if s in string.ascii_letters:
