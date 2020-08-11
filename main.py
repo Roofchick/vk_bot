@@ -43,7 +43,7 @@ with open('blacklist.txt') as f:
 	blacklist = f.split('\n')[2:]
 	black_mess = f.split('\n')[0]
 
-def main(ac, TOKEN, STATUS, SLEEP, MARK, NAME, auto_friends, ls_user, group_name, base_name, group, commands, voice_bot):
+def main(ac, TOKEN, STATUS, SLEEP, MARK, NAME, auto_friends, ls_user, group_name, base_name, group, commands, voice_bot, reply):
 	cities_users = {}
 	disable_mentions = False
 	regulars = ('id', 'first_name', 'last_name', 'about', 'bdate', 'city', 'count_messages', 'uptime')
@@ -186,10 +186,13 @@ def main(ac, TOKEN, STATUS, SLEEP, MARK, NAME, auto_friends, ls_user, group_name
 								ans_ok = ans[500*max:500*(max+1)]
 							else:
 								ans_ok = ans[max*500:]
-							paramss = {'access_token': TOKEN, 'peer_id': i[3], 'v': 5.87, 'message': ans_ok, 'disable_mentions': int(disable_mentions)}
+							paramss = {'access_token': TOKEN, 'peer_id': i[3], 'v': 5.122, 'message': ans_ok, 'disable_mentions': int(disable_mentions), 'random_id': random.randint(1, 1000000)}
 							if attachments:
 								paramss.update({'attachment':','.join(attachments)})
+							if reply:
+								paramss.update({'reply_to':i[1]})
 							a = requests.post('https://api.vk.com/method/messages.send', params = paramss)
+							print(a.text)
 							max += 1
 							a = json.loads(a.text)
 							if len(a) > 1:
@@ -300,12 +303,18 @@ def main(ac, TOKEN, STATUS, SLEEP, MARK, NAME, auto_friends, ls_user, group_name
 							else:
 								ans_ok = ans[max*500:]
 							try:
-								paramss = {'access_token': TOKEN, 'peer_id': i['object']['user_id'], 'v': 5.87, 'message': ans_ok, 'disable_mentions': int(disable_mentions)}
+								paramss = {'access_token': TOKEN, 'peer_id': i['object']['user_id'], 'v': 5.92, 'message': ans_ok, 'disable_mentions': int(disable_mentions), 'random_id': random.randint(1, 11000000)}
 							except:
-								paramss = {'access_token': TOKEN, 'peer_id': i['object']['message']['peer_id'], 'v': 5.87, 'message': ans_ok, 'disable_mentions': int(disable_mentions)}
+								paramss = {'access_token': TOKEN, 'peer_id': i['object']['message']['peer_id'], 'v': 5.92, 'message': ans_ok, 'disable_mentions': int(disable_mentions), 'random_id': random.randint(1, 11000000)}
 							if attachments:
 								paramss.update({'attachment':','.join(attachments)})
+							'''
+							if reply:
+								print(i)
+								paramss.update({'reply_to': i['object']['message']['conversation_message_id']})
+							'''
 							a = requests.post('https://api.vk.com/method/messages.send', params = paramss)
+							print(a.text)
 							max += 1
 							a = json.loads(a.text)
 							if len(a) > 1:
@@ -379,6 +388,10 @@ if __name__ == '__main__':
 					voice_bot = True
 				else:
 					voice_bot = False
+				if '5' in settings:
+					reply = True
+				else:
+					reply = False
 			with open(f'bot/accounts/{ac}/commands.txt') as f:
 				commands = []
 				line = f.readline()
@@ -400,7 +413,7 @@ if __name__ == '__main__':
 					line = f.readline()
 			with open(f'bot/accounts/{ac}/status.txt') as f:
 				STATUS = f.read()
-			threading.Thread(target=main, args=(ac, TOKEN, STATUS, SLEEP, MARK, NAME, auto_friends, ls_user, group_name, base_name, group, commands, voice_bot)).start()
+			threading.Thread(target=main, args=(ac, TOKEN, STATUS, SLEEP, MARK, NAME, auto_friends, ls_user, group_name, base_name, group, commands, voice_bot, reply)).start()
 		except Exception as err:
 			print(f'Ошибка аккаунта {ac}', err)
 		ac += 1
