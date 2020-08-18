@@ -18,12 +18,11 @@ def get_server(TOKEN, group):
 			if server[:8] == 'https://':
 				server = server[8:]
 			return key, server, ts
-			break
 		except:
 			continue
 	
 
-def get_upd(TOKEN, key, server, ts):
+def get_upd(TOKEN, key, server, ts, group):
 	while True:
 		try:
 			b = requests.get(f'https://{server}', params = {'act': 'a_check', 'key': key, 'ts': ts, 'wait': 40, 'versions': 3, 'mode': 10})
@@ -34,10 +33,9 @@ def get_upd(TOKEN, key, server, ts):
 					ts = upd['ts']
 					return get_upd(TOKEN, key, server, ts)
 				elif upd['failed'] in (2,3):
-					key, server, ts = get_server(TOKEN)
+					key, server, ts = get_server(TOKEN, group)
 					return get_upd(TOKEN, key, server, ts)
 			ts = upd['ts']
 			return upd['updates'], key, server, ts
-			break
 		except:
 			continue

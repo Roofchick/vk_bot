@@ -72,7 +72,7 @@ def main(ac, TOKEN, STATUS, SLEEP, MARK, NAME, auto_friends, ls_user, group_name
 			time_status = new_time_status
 			if auto_friends:
 				friends(TOKEN, ac)
-		updates, key, server, ts = get_upd(TOKEN, key, server, ts)
+		updates, key, server, ts = get_upd(TOKEN, key, server, ts, group)
 		for i in updates:
 			disable_mentions = False
 			obr = True
