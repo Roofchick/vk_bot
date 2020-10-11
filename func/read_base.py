@@ -1,6 +1,6 @@
 
 def read_base(name):
-	with open('bot/base/' + name) as f:
+	with open('bot/base/' + name, encoding="utf8") as f:
 		base = []
 		line = f.readline()
 		while line:

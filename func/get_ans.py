@@ -1,7 +1,8 @@
-import random
+import random, time
 from func.tell import *
 from func.regular import *
 from func.append_attach import *
+from func.randoms import *
 
 def get_ans(message, base, commands, TOKEN, peer_id, group, tr_group, voice_bot, user_id, count_message, start_bot, regulars):
 	max_g = 0
@@ -31,6 +32,8 @@ def get_ans(message, base, commands, TOKEN, peer_id, group, tr_group, voice_bot,
 					ans.append(f[1])
 	if ans:
 		ans = random.choice(ans)
+		if '@[' in ans:
+			ans = randoms(ans)
 		if 'https://vk.com/' in ans:
 			return append_attach(ans)
 		if (ans[0] == '{' and ans[-1] == '}') or voice_bot:
